@@ -24,6 +24,7 @@ class User{
 	public $username;
 	public $email;
 	public $password;
+	public $connected;
 
 	function __construct($username, $email, $password){
 		$this->username = $username;
@@ -57,15 +58,25 @@ class User{
 	}
 
 	public function sessionConnect(){
+		// Récup l'ID pour enregistrement des session
 		$query = "SELECT ID FROM users WHERE username = '$this->username' ";
 		$connected = DataBase::bdd();
 		$prepared = $connected->prepare($query);
 		$prepared->execute();
 		$data = $prepared->fetchAll();
 		$_SESSION['ID'] = $data[0]['ID'];
+		// Enregistrement du statut connected dans la DB
+		$query = "UPDATE users SET connected = 1 WHERE email = '$this->email' ";
+		$connected = DataBase::bdd();
+		$prepared = $connected->prepare($query);
+		$prepared->execute();
 	}
 
 	public function sessionDeconnect(){
+		$query = "UPDATE users SET connected = 0 WHERE email = '$this->email' ";
+		$connected = DataBase::bdd();
+		$prepared = $connected->prepare($query);
+		$prepared->execute();
 		session_destroy();
 	}
 
