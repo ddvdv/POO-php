@@ -45,7 +45,7 @@ class User{
 		$prepared = $connected->prepare($query);
 		$prepared->execute();
 		$data = $prepared->fetchAll();
-		if (!$data[0]){
+		if (!isset($data[0])){
 			$query = "INSERT INTO users(username, email, password) VALUES('$this->username', '$this->email', '$this->password')";
 			$connected = DataBase::bdd();
 			$prepared = $connected->prepare($query);
